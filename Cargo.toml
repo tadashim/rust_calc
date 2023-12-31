@@ -1,5 +1,5 @@
 [package]
-name = "rust_struct_and_enum"
+name = "rust_calc"
 version = "0.1.0"
 edition = "2021"
 
