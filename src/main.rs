@@ -1,22 +1,17 @@
-enum Message {
-    Quit,
-    Move { x: i32, y: i32 },
-    Write(String),
-    ChangeColor(u8, u8, u8),
-}
-
-impl Message {
-    fn call(&self) {
-        match self {
-            Message::Quit => println!("Quit"),
-            Message::Move { x, y } => println!("Move to ({}, {})", x, y),
-            Message::Write(s) => println!("Write {}", s),
-            Message::ChangeColor(r, g, b) => println!("Change color to ({}, {}, {})", r, g, b),
-        }
+fn find_square_root(number: f64) -> Option<f64> {
+    if number >= 0.0 {
+        Some(number.sqrt())
+    } else {
+        None
     }
 }
 
 fn main() {
-    let msg = Message::Write(String::from("hello"));
-    msg.call();
+    let number = 4.0;
+    let square_root = find_square_root(number);
+
+    match square_root {
+        Some(value) => println!("Square root of {} is {}", number, value),
+        None => println!("Cannot find square root of {}", number),
+    }
 }
