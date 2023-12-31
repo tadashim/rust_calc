@@ -6,42 +6,58 @@ enum Operation {
 }
 
 impl Operation {
-    fn calculate(&self) -> f64 {
+    fn calculate(&self) -> Option<f64> {
         match self {
-            Operation::Add(a, b) => a + b,
-            Operation::Subtract(a, b) => a - b,
-            Operation::Multiply(a, b) => a * b,
-            Operation::Divide(a, b) => a / b,
+            Operation::Add(a, b) => Some(a + b),
+            Operation::Subtract(a, b) => Some(a - b),
+            Operation::Multiply(a, b) => Some(a * b),
+            Operation::Divide(a, b) => if *b != 0.0 { Some(a / b) } else { None },
         }
     }
 }
 
 fn main() {
-    println!("Enter the first number: ");
-    let mut first_number = String::new();
-    std::io::stdin().read_line(&mut first_number).expect("Failed to read line");
-    let first_number: f64 = first_number.trim().parse().expect("Please type a number!");
+    let first_number = read_number("Please enter the first number:");
+    let operation = read_operation("Please enter the operation (+, -, * or /):");
+    let second_number = read_number("Please enter the second number:");
 
-    println!("Enter the operation: ");
-    let mut operation = String::new();
-    std::io::stdin().read_line(&mut operation).expect("Failed to read line");
-    let operation: char = operation.trim().parse().expect("Please type a number!");
-    
-    println!("Enter the second number: ");
-    let mut second_number = String::new();
-    std::io::stdin().read_line(&mut second_number).expect("Failed to read line");
-    let second_number: f64 = second_number.trim().parse().expect("Please type a number!");
-
-    // Create an instance of the Operation enum based on the user input.
-    // Call the calculate method on the Operation instance.
-    // Print the result to the terminal.
     let op = match operation {
         '+' => Operation::Add(first_number, second_number),
         '-' => Operation::Subtract(first_number, second_number),
         '*' => Operation::Multiply(first_number, second_number),
         '/' => Operation::Divide(first_number, second_number),
-        _ => panic!("Invalid operation"),
+        _ => {
+            println!("Invalid operation");
+            return;
+        },
     };
-    let result = op.calculate();
-    println!("The result is {}", result);
+
+    match op.calculate() {
+        Some(result) => println!("The result is {}", result),
+        None => println!("Cannot divide by zero"),
+    }
+}
+
+fn read_number(prompt: &str) -> f64 {
+    loop {
+        println!("{}", prompt);
+        let mut input = String::new();
+        std::io::stdin().read_line(&mut input).expect("Failed to read line");
+        match input.trim().parse() {
+            Ok(num) => return num,
+            Err(_) => println!("Please type a number!"),
+        }
+    }
+}
+
+fn read_operation(prompt: &str) -> char {
+    loop {
+        println!("{}", prompt);
+        let mut operation = String::new();
+        std::io::stdin().read_line(&mut operation).expect("Failed to read line");
+        match operation.trim().parse() {
+            Ok(op) => return op,
+            Err(_) => println!("Please type a valid operation (+, -, *, /)"),
+        }
+    }
 }
