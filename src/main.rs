@@ -1,20 +1,15 @@
-struct Rectangle {
-    width: f64,
-    height: f64,
-}
-
-impl Rectangle {
-    fn area(&self) -> f64 {
-        self.width * self.height
-    }
+enum Animal {
+    Dog(String),
+    Cat(String),
+    Bird(String),
 }
 
 fn main() {
-    let my_rectangle = Rectangle {
-        width: 3.0,
-        height: 4.0,
-    };
+    let my_pet = Animal::Cat("Fluffy".to_string());
 
-    let area = my_rectangle.area();
-    println!("Area: {}", area);
+    if let Animal::Cat(name) = my_pet {
+        println!("I have a cat named {}", name);
+    } else {
+        println!("I don't have a cat");
+    }
 }
